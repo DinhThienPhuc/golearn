@@ -1,46 +1,42 @@
 package main
 
+import "errors"
+
 import "fmt"
 
+func f1(arg int) (int, error) {
+	if 42 == arg {
+		return -1, errors.New("Can't work with 42")
+	}
+
+	return arg + 3, nil
+}
+
+// ArgError initial
+type ArgError struct {
+	arg  int
+	prob string
+}
+
+func (e *ArgError) Error() string {
+	return fmt.Sprintf("%d - %s", e.arg, e.prob)
+}
+
+func f2(arg int) (int, error) {
+	if 42 == arg {
+		return -1, &ArgError{arg, "Can't work with it!"}
+	}
+
+	return arg + 3, nil
+}
+
 func main() {
-	s := make([]string, 3)
-	fmt.Println("emp: ", s)
-
-	s[0] = "a"
-	s[1] = "b"
-	s[2] = "c"
-	fmt.Println("set: ", s)
-	fmt.Println("get: ", s[2])
-
-	fmt.Println("len: ", len(s))
-
-	s = append(s, "d")
-	s = append(s, "e", "f")
-	fmt.Println("apd: ", s)
-
-	c := make([]string, len(s))
-	copy(c, s)
-	fmt.Println("cpy: ", c)
-
-	l := s[2:5]
-	fmt.Println("sl1: ", l)
-
-	l = s[:5]
-	fmt.Println("sl2: ", l)
-
-	l = s[2:]
-	fmt.Println("sl3: ", l)
-
-	t := []string{"g", "h", "i"}
-	fmt.Println("dcl: ", t)
-
-	twoD := make([][]int, 3)
-	for i := 0; i < 3; i++ {
-		innerLen := i + 1
-		twoD[i] = make([]int, innerLen)
-		for j := 0; j < innerLen; j++ {
-			twoD[i][j] = i + j
+	for _, i := range []int{7, 42} {
+		r, e := f1(i)
+		if e != nil {
+			fmt.Println("f1 failed: ", e)
+		} else {
+			fmt.Println("f1 worked: ", r)
 		}
 	}
-	fmt.Println("2d: ", twoD)
 }
