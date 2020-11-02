@@ -1,8 +1,10 @@
 //geometry.go
 package main
 
-import "fmt"
-import "learn-go/rectangle"
+import (
+	"fmt"
+	"rectangle"
+)
 
 func main() {
 	var length, width float64 = 3, 4
